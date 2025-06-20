@@ -149,3 +149,4 @@ touch notebook/Model_trainer.ipynb
 # Do the EDA and Model Traininer 
 
 
+# Data Ingestion
