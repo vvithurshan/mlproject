@@ -149,4 +149,7 @@ touch notebook/Model_trainer.ipynb
 # Do the EDA and Model Traininer 
 
 
-# Data Ingestion
+# Data Ingestion - Read the data from data source and save it in the artifact folder as raw.csv, train.csv, and test.csv
+
+# Data Transformation - encoding, feature engineering, data cleaning
+
