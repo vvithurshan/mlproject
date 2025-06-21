@@ -153,3 +153,10 @@ touch notebook/Model_trainer.ipynb
 
 # Data Transformation - encoding, feature engineering, data cleaning
 
+what is the use of columntransformer
+
+Pipleline - handles missing values and doing standard scalar
+
+# utils
+
+# Model Training

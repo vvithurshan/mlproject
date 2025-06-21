@@ -33,7 +33,7 @@ class DataTransformation:
                 'test_preparation_course'
             ]
 
-            num_pipleline = Pipeline(
+            num_pipeline = Pipeline(
                 steps = [
                     ('imputer', SimpleImputer(strategy = 'median')),
                     ('scalar', StandardScaler())
@@ -44,8 +44,7 @@ class DataTransformation:
             cat_pipeline = Pipeline(
                 steps = [
                     ('imputer', SimpleImputer(strategy='most_frequent')),
-                    ('one_hot_encoder', OneHotEncoder()),
-                    ('scalar', StandardScaler())
+                    ('one_hot_encoder', OneHotEncoder(handle_unknown='ignore'))
                 ]
             )
 
@@ -53,12 +52,11 @@ class DataTransformation:
 
             preprocessor = ColumnTransformer(
                 [
-                    ('num_pipeline', num_pipleline, numerical_columns),
+                    ('num_pipeline', num_pipeline, numerical_columns),
                     ('cat_pipeline', cat_pipeline, categorical_columns)
                 ]
             )
             logging.info('Preprocessor Object Created')
-
             return preprocessor
         
         except Exception as e:
@@ -82,11 +80,17 @@ class DataTransformation:
             input_feature_test_df = test_df.drop(columns = [target_column_name], axis = 1)
             target_feature_test_df = test_df[target_column_name]
 
-            train_arr = np.c_[input_feature_train_df, np.array(target_feature_train_df)]
-            test_arr = np.c_[input_feature_test_df, np.array(target_feature_test_df)]
+            logging.info(
+                f"Applying preprocessing object on training dataframe and testing dataframes."
+            )
+
+            input_feature_train_arr = preprocessor_obj.fit_transform(input_feature_train_df)
+            input_feature_test_arr = preprocessor_obj.transform(input_feature_test_df)
+            
+            train_arr = np.c_[input_feature_train_arr, np.array(target_feature_train_df)]
+            test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
 
             logging.info('Saved Preprocessing object')
-
             save_object(
                 file_path = self.data_transformation_config.preprocessor_obj_file_path,
                 obj = preprocessor_obj
